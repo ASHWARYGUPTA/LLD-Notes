@@ -1,3 +1,13 @@
+/*
+ * Teaching note:
+ * This problem version mixes workflow code with concrete object selection. It
+ * fails to scale because every new transport type expands this method with more
+ * branching, duplication, and knowledge of implementation classes.
+ */
+
+// This problem version mixes business flow with object creation decisions. It
+// fails to scale because every new transport mode forces edits in the control
+// class, so one class keeps growing with more branching and more responsibilities.
 
 interface Logistics {
 
@@ -23,11 +33,12 @@ class Road implements Logistics {
 class LogisticsControl { // Breaks SRP -> 1) Decides what kind of object it is  2)Calling the methods 
 
     public void send(String mode) {
-        if (mode == "Air") {
+        // Creation logic is duplicated inside the workflow, so expansion means rewriting this method.
+        if ("Air".equals(mode)) {
             Logistics log = new Air();
             log.send();
         }
-        if (mode == "Road") {
+        if ("Road".equals(mode)) {
             Logistics log = new Road();
             log.send();
         }
@@ -41,6 +52,7 @@ class LogisticsControl { // Breaks SRP -> 1) Decides what kind of object it is  
 
 public class Problem {
 
+    // The empty driver keeps attention on the scaling problem inside LogisticsControl.
     public static void main(String[] args) {
 
     }

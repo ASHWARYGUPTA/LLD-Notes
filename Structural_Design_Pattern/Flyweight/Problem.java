@@ -1,4 +1,10 @@
-
+/*
+ * Problem version:
+ * Every `Tree` object stores both its position and its repeated descriptive data.
+ * With a huge forest, that means the same name, color, and texture strings are
+ * copied again and again, so memory usage grows mostly because shared state is
+ * duplicated inside each object.
+ */
 import java.util.*;
 //Problem ?? -> in Forest the x , y only change
 //The other things of tree stays the same
@@ -7,6 +13,8 @@ class Tree {
 
     private int x;
     private int y;
+    // These fields barely change between many trees, yet this version stores
+    // fresh copies of them in every instance.
     private String name;
     private String color;
     private String textures;
@@ -57,6 +65,8 @@ public class Problem {
 
         Random random = new Random();
 
+        // A million objects are created, and each one carries the repeated type data
+        // instead of sharing one reusable description object.
         for (int i = 0; i < 1_000_000; i++) {
             int x = random.nextInt(10000);
             int y = random.nextInt(10000);

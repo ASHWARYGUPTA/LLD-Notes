@@ -1,3 +1,10 @@
+/*
+ * Facade solution:
+ * `MovieBookingService` gives the client one high-level entry point for a complex
+ * booking workflow. The subsystem classes still do their individual jobs, but the
+ * caller no longer needs to understand ordering, coordination, or how many
+ * services are involved behind the scenes.
+ */
 // BookMyShow - Facade Design Pattern
 
 class PaymentService {
@@ -44,6 +51,7 @@ class MovieBookingService {
     private TicketService ticketService;
 
     public MovieBookingService() {
+        // The facade owns subsystem wiring so client code can stay small and focused.
         paymentService = new PaymentService();
         seatReservationService = new SeatReservationService();
         notificationService = new NotificationService();
@@ -58,6 +66,7 @@ class MovieBookingService {
             String seatNumber,
             String userEmail) {
 
+        // One facade call preserves the business sequence in a single place.
         paymentService.makePayment(accountId, 350.0);
 
         seatReservationService.reserveSeat(movieId, seatNumber);

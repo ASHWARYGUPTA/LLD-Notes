@@ -1,3 +1,10 @@
+/*
+ * Problem version:
+ * The client must know every subsystem, create them in the right order, and
+ * coordinate the whole booking workflow manually. That makes the caller tightly
+ * coupled to internal steps, so even a small change in the booking process leaks
+ * out to every place that performs a booking.
+ */
 //BookMyShow
 
 class PaymentService {
@@ -38,6 +45,8 @@ class TicketService {
 public class Problem {
 
     public static void main(String[] args) {
+        // All orchestration responsibility lives in client code here, which is the
+        // main pain point Facade is meant to remove.
         PaymentService p = new PaymentService();
         p.makePayment("user123", 200);
 

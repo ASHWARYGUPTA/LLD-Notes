@@ -1,3 +1,13 @@
+/*
+ * Teaching note:
+ * Builder works well when an object has a few required inputs and many optional
+ * ones. It scales because callers add options by name and in steps, instead of
+ * relying on long constructors whose parameter lists keep growing.
+ */
+
+// The Builder pattern keeps required data upfront and lets optional choices grow
+// without exploding constructor signatures. That scales better because callers
+// can assemble readable configurations step by step instead of memorizing order.
 
 import java.util.*;
 
@@ -39,6 +49,7 @@ class BurgerMeal {
             this.patty = patty;
         }
 
+        // Each fluent method adds one optional detail without forcing every caller to pass it.
         public BurgerBuilder addCheese(boolean addCheese) {
             if (addCheese) {
                 this.withCheese = true;
@@ -62,6 +73,7 @@ class BurgerMeal {
         }
 
         public BurgerMeal build() {
+            // build() is the single handoff point where the final object is assembled.
             return new BurgerMeal(this);
 
         }
@@ -72,6 +84,8 @@ class BurgerMeal {
 public class Main {
 
     public static void main(String[] args) {
-        BurgerMeal meal = BurgerMeal.BurgerBuilder("wheat", "veg").addCheese(true).build();
+        // This teaching call is meant to show fluent assembly; the invocation syntax is still illustrative here.
+        // The chained style shows why Builder stays readable as optional meal choices increase.
+        BurgerMeal meal = new BurgerMeal.BurgerBuilder("wheat", "veg").addCheese(true).build();
     }
 }

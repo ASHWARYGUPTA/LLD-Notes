@@ -1,3 +1,16 @@
+/*
+ * Teaching note:
+ * A single concrete factory removes some duplication, but this version still
+ * does not scale across multiple regions because the checkout flow must know
+ * which country-specific factory to call. That remaining branching is what the
+ * full Abstract Factory solves.
+ */
+
+
+// This file demonstrates the limit of using only a simple factory. Creation is
+// centralized for one region, but the checkout flow still needs region-specific
+// branching to decide which factory to call. The moment related products vary
+// together by country, a higher-level factory abstraction becomes necessary.
 
 interface PaymentGateway {
 
@@ -37,10 +50,10 @@ class GSTInvoice implements Invoice {
 class IndiaPayoutFactory {
 
     public static PaymentGateway createPaymentGateway(String gatewayType) {
-        if (gatewayType == "razorpay") {
+        if ("razorpay".equals(gatewayType)) {
             return new RazorPayGateway();
         }
-        if (gatewayType == "PayU") {
+        if ("PayU".equals(gatewayType)) {
             return new PayUGateway();
         }
         return new RazorPayGateway();
@@ -62,8 +75,9 @@ class CheckOutService { // If mutiple countries will fail
     }
 
     public void checkOut() {
-        if (countryCode == "India") { // Again Fails Not Dealing with Multiple Factorys
-            PaymentGateway gateway = IndiaPayoutFactory.createPaymentGateway("razorpay");
+        // A country branch in the client still means checkout must know every region-specific factory.
+        if ("India".equals(countryCode)) { // Again Fails Not Dealing with Multiple Factorys
+            PaymentGateway gateway = IndiaPayoutFactory.createPaymentGateway(gatewayType);
             Invoice i1 = IndiaPayoutFactory.creatInvoice();
         }
         // else {
@@ -73,6 +87,7 @@ class CheckOutService { // If mutiple countries will fail
     }
 }
 
+// The outer class is just a holder; the scaling lesson is in the factory usage above.
 public class Factory {
 
 }

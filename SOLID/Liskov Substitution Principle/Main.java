@@ -1,3 +1,11 @@
+/*
+ * Teaching note:
+ * This example is small, but it demonstrates the idea behind Liskov
+ * Substitution: code using the base type should still work when a subtype is
+ * provided. `TextNotifications` keeps the same general contract of "a thing
+ * that can send a notification," so substitution stays safe. The tradeoff is
+ * that inheritance only works when subclasses truly honor parent expectations.
+ */
 
 class Notifications {
 
@@ -10,6 +18,8 @@ class TextNotifications extends Notifications {
 
     @Override
     public void sendNotification() {
+        // The subtype changes the implementation detail while preserving the
+        // behavior shape expected by callers of Notifications.
         System.out.println("Send Text");
     }
 }

@@ -1,4 +1,10 @@
-
+/*
+ * Adapter solution:
+ * `CheckOutService` continues to depend on the app's `PaymentGateway` interface,
+ * while `RazorpayAdapter` translates that interface into the third-party
+ * `RazorpayAPI`. This works because the mismatch is isolated in one wrapper
+ * instead of spreading vendor-specific details through client code.
+ */
 interface PaymentGateway {
 
     void pay(String orderId, double amount);
@@ -30,6 +36,8 @@ class RazorpayAdapter implements PaymentGateway {
 
     @Override
     public void pay(String orderId, double amount) {
+        // The adapter converts the call expected by the client into the call shape
+        // offered by the incompatible third-party API.
         r1.makePayment(orderId, amount);
     }
 }
@@ -52,6 +60,8 @@ public class Main {
     public static void main(String[] args) {
         CheckOutService c1 = new CheckOutService(new PayUGateway());
         c1.checkout("123", 240);
+        // The checkout service could switch to `new RazorpayAdapter()` here without
+        // learning anything about `RazorpayAPI` itself.
         //Now if we decide not to use the PayU Gateway and switch to Razorpay 
     }
 }

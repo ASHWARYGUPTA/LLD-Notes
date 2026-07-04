@@ -1,4 +1,13 @@
-
+/*
+ * Flyweight solution:
+ * The repeating tree description is extracted into `TreeType`, while each `Tree`
+ * keeps only coordinates. That sharing is the reason the pattern saves memory.
+ *
+ * Caveat:
+ * This teaching file is intentionally left as-is even though it is incomplete and
+ * does not compile in its current form. The comments explain the design intent
+ * without silently correcting the code.
+ */
 //The other things of tree stays the same
 import java.util.*;
 
@@ -23,12 +32,13 @@ class TreeType {
 //Reusing it
 class TreeTypeFactory {
 
-    private Map<String, TreeType> treeTypeMap = new HashMap<>();
+    // The factory is meant to reuse one flyweight per logical tree type key.
+    private static final Map<String, TreeType> treeTypeMap = new HashMap<>();
 
     public static TreeType getTreeType(String name, String color, String texture) {
         String key = name + "-" + color + "-" + texture;
         if (!treeTypeMap.containsKey(key)) {
-            treeTypeMap.put(key, new TreeType(name, color, texture))
+            treeTypeMap.put(key, new TreeType(name, color, texture));
         }
         return treeTypeMap.get(key);
     }
@@ -38,6 +48,7 @@ class Tree {
 
     private int x;
     private int y;
+    // Each tree now points at shared intrinsic state instead of duplicating it.
     private TreeType treeType;
 
     public Tree(int x, int y, TreeType treeType) {
@@ -56,8 +67,15 @@ class Forest {
     private List<Tree> trees = new ArrayList<>();
 
     public void plantTree(int x, int y, String name, String color, String texture) {
+        // The forest asks the factory for a shared flyweight before creating a tree.
         TreeType tree = TreeTypeFactory.getTreeType(name, color, texture);
         trees.add(new Tree(x, y, tree));
+    }
+
+    public void draw() {
+        for (Tree tree : trees) {
+            tree.draw();
+        }
     }
 }
 

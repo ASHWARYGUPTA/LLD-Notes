@@ -1,4 +1,10 @@
-
+/*
+ * Composite solution:
+ * Both leaf products and grouped bundles implement `CartItem`, so client code can
+ * calculate totals and display entries through one common interface. That removes
+ * the `instanceof` branching from the shopping cart flow and makes nested
+ * structures behave like single objects from the caller's perspective.
+ */
 import java.util.*;
 
 interface CartItem {
@@ -34,6 +40,7 @@ class Product implements CartItem {
 class ProductBundle implements CartItem {
 
     private String bundleName;
+    // A composite stores children through the same abstraction the client uses.
     private List<CartItem> prodList = new ArrayList<>();
 
     public ProductBundle(String bundleName) {
@@ -41,6 +48,8 @@ class ProductBundle implements CartItem {
     }
 
     public void addProduct(Product p) {
+        // This sample keeps the original signature, though a full composite usually
+        // accepts `CartItem` here so bundles can contain other bundles directly.
         prodList.add(p);
     }
 
@@ -102,6 +111,7 @@ public class Main {
 
         double total = 0;
         // Now Doesn't need to check 
+        // Every cart entry responds to the same operations, so the loop stays simple.
         for (CartItem item : cart) {
             item.dislpay("");
             total += item.getPrice();

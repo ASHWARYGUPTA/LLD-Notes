@@ -1,4 +1,10 @@
-
+/*
+ * Problem version:
+ * The cart has no shared abstraction for single products and bundles, so the
+ * client stores `Object`, performs type checks, and runs different logic branches
+ * for each case. That makes the caller responsible for structure details instead
+ * of letting the items describe themselves uniformly.
+ */
 import java.util.*;
 
 class Product {
@@ -23,6 +29,8 @@ class Product {
 class ProductBundle {
 
     private String bundleName;
+    // This bundle can hold only leaf products, so recursive bundle-inside-bundle
+    // composition is awkward in the problem version.
     private List<Product> prodList = new ArrayList<>();
 
     public ProductBundle(String bundleName, List<Product> prodList) {
@@ -81,6 +89,7 @@ public class Problem {
         schoolKit.addProduct(new Product("Highlighter", 149));
 
         // Add to cart
+        // Mixing unrelated concrete types in one list forces runtime inspection later.
         List<Object> cart = new ArrayList<>(); //Problem
         cart.add(book);
         cart.add(iphoneCombo);
@@ -92,6 +101,8 @@ public class Problem {
         double total = 0;
 
         for (Object item : cart) {
+            // The caller must understand every concrete type instead of sending the
+            // same message to every cart entry.
             //Should Not have this
             if (item instanceof Product) {
                 Product product = (Product) item;

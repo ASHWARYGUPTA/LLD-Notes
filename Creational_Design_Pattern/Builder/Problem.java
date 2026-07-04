@@ -1,3 +1,15 @@
+/*
+ * Teaching note:
+ * The constructor-based approach starts simply but fails to scale as optional
+ * meal choices increase. Call sites become harder to read, overloads multiply,
+ * and adding one more option can ripple through many constructor signatures.
+ */
+
+
+// This file captures the "telescoping constructor" problem. A constructor works
+// for a tiny object, but once optional fields keep growing, the caller must pass
+// many parameters in one shot and the class becomes harder to read, validate,
+// and extend without breaking call sites.
 
 //---------------
 //Bun
@@ -24,6 +36,7 @@ class BurgerMeal {
 public class Problem {
 
     public static void main(String[] args) {
+        // This call site is readable only while the object stays tiny; more options would quickly make it noisy.
         BurgerMeal burgerMeal = new BurgerMeal("wheat", "veg");
     }
 }
