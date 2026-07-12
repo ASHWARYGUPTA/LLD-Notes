@@ -1,0 +1,44 @@
+
+class OrderService {
+
+    public static void main(String[] args) {
+        System.out.println("Placing order");
+        sendSMS();
+        sendEmail();
+        calculateETA();
+    }
+
+    public static void sendSMS() {
+        try {
+            Thread.sleep(3000);
+            System.out.println("SMS Done");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void sendEmail() {
+        try {
+            Thread.sleep(5000);
+            System.out.println("Email done");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void calculateETA() {
+        try {
+            Thread.sleep(2000);
+            System.out.println("ETA done");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+public class Non_Multi_Threaded {
+
+    public static void main(String[] args) {
+        OrderService.main(args);
+    }
+}
